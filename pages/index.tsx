@@ -9,8 +9,22 @@ const Home: NextPage = () => {
   return (
     <div className={styles.container}>
       {/* Top Section */}
-      <h1 className={styles.h1}>☭ Soviet Girls Staking</h1>
+      <h1 className={styles.h1}>☭ Soviet Girls Ruble</h1>
       <div className={styles.nftBoxGrid}>
+
+        <div
+          className={styles.optionSelectBox}
+          role="button"
+          onClick={() => router.push(`/mint`)}
+        >
+          {/* Mint a new NFT */}
+          <Image src="/icons/drop.webp" alt="drop" width={64} height={64} />
+          <h2 className={styles.selectBoxTitle}>Минтинг SG₽</h2>
+          <p className={styles.selectBoxDescription}>
+            Примите участие в запуске Soviet Girls Ruble! Приобретите SG₽ за MATIC по фиксированному курсу.
+          </p>
+        </div>
+
         <div
           className={styles.optionSelectBox}
           role="button"
@@ -18,11 +32,12 @@ const Home: NextPage = () => {
         >
           {/* Staking an NFT */}
           <Image src="/icons/token.webp" alt="token" width={64} height={64} />
-          <h2 className={styles.selectBoxTitle}>Войти в кабинет стейкинга</h2>
+          <h2 className={styles.selectBoxTitle}>Кабинет стейкинга</h2>
           <p className={styles.selectBoxDescription}>
             Отправьте ваши NFT из коллекции Soviet Girls на хранение и получайте награды!
           </p>
         </div>
+
       </div>
     </div>
   );
