@@ -36,6 +36,8 @@ const Stake: NextPage = () => {
   const { data: stakedTokens } = useContractRead(contract, "getStakeInfo", [
     address,
   ]);
+  const { data: rewardsPerUnitTime } = useContractRead(contract, "getRewardsPerUnitTime");
+  const { data: rewardTokenBalance } = useContractRead(contract, "getRewardTokenBalance");
 
   useEffect(() => {
     if (!contract || !address) return;
@@ -62,7 +64,7 @@ const Stake: NextPage = () => {
   }
 
   if (isLoading) {
-    return <div>Loading</div>;
+    return <div>Загрузка...</div>;
   }
 
   return (
@@ -84,8 +86,8 @@ const Stake: NextPage = () => {
               <p className={styles.tokenValue}>
                 <b>
                   {!claimableRewards
-                    ? "Loading..."
-                    : ethers.utils.formatUnits(claimableRewards, 18)}
+                    ? "Загрузка..."
+                    : "≈ " + ethers.utils.formatUnits(claimableRewards, 18).split(".")[0]}
                 </b>{" "}
                 {tokenBalance?.symbol}
               </p>
@@ -93,16 +95,39 @@ const Stake: NextPage = () => {
             <div className={styles.tokenItem}>
               <h3 className={styles.tokenLabel}>Текущий баланс</h3>
               <p className={styles.tokenValue}>
-                <b>{tokenBalance?.displayValue}</b> {tokenBalance?.symbol}
+                <b>≈ {tokenBalance?.displayValue.split(".")[0]}</b> {tokenBalance?.symbol}
               </p>
             </div>
           </div>
+          <div className={styles.tokenGrid}>
+            <div className={styles.tokenItem}>
+              <h3 className={styles.tokenLabel}>Скорость добычи</h3>
+              <p className={styles.tokenValue}>
+                <b>
+                  ≈ {stakedTokens &&
+                   stakedTokens?._tokensStaked.length * 
+                   ethers.utils.formatUnits(rewardsPerUnitTime, 18)}
+                </b>{" "}
+                {tokenBalance?.symbol} в час
+              </p>
+            </div>
+            <div className={styles.tokenItem}>
+              <h3 className={styles.tokenLabel}>Монет в пуле</h3>
+              <p className={styles.tokenValue}>
+                <b>
+                  ≈ {rewardTokenBalance &&
+                   ethers.utils.formatUnits(rewardTokenBalance, 18).split(".")[0]}
+                </b>{" "}{tokenBalance?.symbol}
+              </p>
+            </div>
+          </div>
+          
 
           <Web3Button
             action={(contract) => contract.call("claimRewards")}
             contractAddress={stakingContractAddress}
           >
-            Получить вознаграждение
+            <h3>Вывести вознаграждение</h3>
           </Web3Button>
 
           <hr className={`${styles.divider} ${styles.spacerTop}`} />
