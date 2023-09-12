@@ -69,7 +69,7 @@ const Stake: NextPage = () => {
 
   return (
     <div className={styles.container}>
-      <p><a href="/">Главная</a> | <a href="/mint">Минтинг</a> | <a href="#">Инструкция</a></p>
+      <p><a href="/">Главная</a> | <a href="/mint">Минтинг</a> | <a href="https://vk.ru/@sovietgirls_nft-staking">Инструкция</a></p>
       <h1 className={styles.h1}>☭ Soviet Girls Staking</h1>
       <hr className={`${styles.divider} ${styles.spacerTop}`} />
 
