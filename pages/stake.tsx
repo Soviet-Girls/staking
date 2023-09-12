@@ -69,6 +69,7 @@ const Stake: NextPage = () => {
 
   return (
     <div className={styles.container}>
+      <p><a href="/">Главная</a> | <a href="/mint">Минтинг</a> | <a href="#">Инструкция</a></p>
       <h1 className={styles.h1}>☭ Soviet Girls Staking</h1>
       <hr className={`${styles.divider} ${styles.spacerTop}`} />
 
@@ -106,7 +107,7 @@ const Stake: NextPage = () => {
                 <b>
                   ≈ {stakedTokens &&
                    stakedTokens?._tokensStaked.length * 
-                   ethers.utils.formatUnits(rewardsPerUnitTime, 18)}
+                   Number(ethers.utils.formatUnits(rewardsPerUnitTime, 18))}
                 </b>{" "}
                 {tokenBalance?.symbol} в час
               </p>
