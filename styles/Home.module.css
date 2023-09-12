@@ -178,3 +178,7 @@
   max-height: 300px;
   border-radius: 15px;
 }
+
+.tokenInfo {
+  text-align: left;
+}

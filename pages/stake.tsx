@@ -63,6 +63,53 @@ const Stake: NextPage = () => {
     await contract?.call("stake", [[id]]);
   }
 
+async function addTokenFunction() {
+  if (window.ethereum.networkVersion !== 137) {
+    try {
+      await window.ethereum.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: 137 }]
+      });
+    } catch (error) {
+        // This error code indicates that the chain has not been added to MetaMask
+      if (error.code === 4902) {
+        await window.ethereum.request({
+          method: 'wallet_addEthereumChain',
+          params: [
+            {
+              chainName: 'Polygon Mainnet',
+              chainId: 137,
+              nativeCurrency: { name: 'MATIC', decimals: 18, symbol: 'MATIC' },
+              rpcUrls: ['https://polygon-rpc.com/']
+            }
+          ]
+        });
+      }
+    }
+  }
+  try {
+    const wasAdded = await window.ethereum.request({
+      method: 'wallet_watchAsset',
+      params: {
+        type: 'ERC20', 
+        options: {
+          address: tokenContractAddress, 
+          symbol: "SG₽", 
+          decimals: 18, 
+          image: "https://ipfs.io/ipfs/bafybeiguitp5g5hatmwugngihtkkukvcmnt2y22vwaqzyp3gl752poaipq/%D0%91%D0%B5%D0%B7%20%D0%B8%D0%BC%D0%B5%D0%BD%D0%B8-1.png", 
+        },
+      },
+    });
+    if (wasAdded) {
+      alert("Монета добавлена");
+    } else {
+      alert("Монета не добавлена");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  }
+
   if (isLoading) {
     return <div>Загрузка...</div>;
   }
@@ -72,7 +119,6 @@ const Stake: NextPage = () => {
       <p><a href="/">Главная</a> | <a href="/mint">Минтинг</a> | <a href="https://vk.ru/@sovietgirls_nft-staking">Инструкция</a></p>
       <h1 className={styles.h1}>☭ Soviet Girls Staking</h1>
       <hr className={`${styles.divider} ${styles.spacerTop}`} />
-
       {!address ? (
         <ConnectWallet 
         btnTitle="Подключить кошелек"
@@ -80,6 +126,15 @@ const Stake: NextPage = () => {
         />
       ) : (
         <>
+          <p className={`${styles.tokenInfo}`}>
+            Адрес токена: {tokenContractAddress}
+            <br />
+            Символ: {tokenBalance?.symbol}
+            <br />
+            Число десятичных знаков: 18
+          </p>
+          <button onClick={addTokenFunction}>Добавить в Metamask</button>
+          <hr className={`${styles.divider} ${styles.spacerTop}`} />
           <h2>Ваши токены</h2>
           <div className={styles.tokenGrid}>
             <div className={styles.tokenItem}>
